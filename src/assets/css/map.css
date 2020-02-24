@@ -1,0 +1,125 @@
+#mapid { 
+	height: 535px;
+    width: 77%;
+    margin-left: 10%;
+    margin-top: 13px;
+}
+#points{
+	padding-left: 89px !important;
+	margin-top: 15px;
+}
+.head{
+	padding-left: 31px;
+}
+.iconlist {
+	height: 21px;
+    border: 1px solid gray;
+    margin-top: 10px;
+	margin-left: 6px;
+	cursor: pointer;
+}
+#box { 
+	position: absolute;
+    top: 60px;
+    right: 205px;
+    background-color: white;
+    padding: 10px;
+    z-index: 1000;
+}
+#box img { 
+	margin-left: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+    height: 23px;
+}
+.toggleclass{
+	 display: inline;
+     
+}
+.buttonclass{
+    margin-left: 51%;
+    /* float: right; */
+    height: 43px;
+    margin-top: 6px;
+    /* background-color: red; */
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 11px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.buttonsave{
+    margin-left: -26%;
+    height: 43px;
+    margin-top: 6px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 11px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+.video{
+    align-items: center;
+    margin-left: 60px;
+}
+.videobox{
+    border:1px solid gray;
+    width  : 600px;
+    height: 600px;
+}
+.live{
+    color: green;
+    margin-left: 8px;
+}
+.inactive{
+    color: red;
+    margin-left: 5px;
+}
+.timeline{
+    align-items: center;
+    font-weight: bold;
+    margin-left: 103px;
+}
+.slider{
+    align-items: center;
+    margin-left: 76px;
+}
+.dateclass{
+    margin-left: 50%;
+    margin-top: 10px;
+}
+.card{
+    width: 765px !important;
+    height: 542px !important;
+    overflow-y: scroll ;
+  }
+  
+.videourl{
+    margin-left: 16%;
+    margin-top: 2%;
+    /* width: 45% !important;
+    height: 40%; */
+}
+.time{
+    background: black;
+    width: 300px;
+    margin-left: 30px;
+}
+.time1{
+    background: black;
+    width: 300px;
+    margin-left: 60px;
+}
+/* * { padding: 0; margin: 0; }
+body,html { height: 100%; }
+#mapid { width: 100%; height: 100%; min-height: 100%; }
+* html #mapid { height: 100%; }
+#box { position: absolute;  top: 10px; right: 10px;
+	background-color: white; padding: 10px; z-index: 1000; }
+#box img { margin-left: 20px; margin-right: 5px; cursor: pointer; } */

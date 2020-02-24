@@ -1,0 +1,315 @@
+import React, { Component } from 'react';
+import L from 'leaflet'; // Same as `import * as L from 'leaflet'` with webpack
+
+import bluemarker from '../assets/images/marker-blue.png';
+import greenmarker from '../assets/images/marker-green.png';
+import redmarker from '../assets/images/marker-red.png';
+import darkmarker from '../assets/images/marker-dark.png';
+import markershadow from '../assets/images/marker-shadow.png';
+import cameramarker from '../assets/images/camera.jpg';
+import sensormarker from '../assets/images/sensor.png';
+import telescopemarker from '../assets/images/telescope.png';
+import '../assets/css/map.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "react-toggle/style.css"
+import Toggle from 'react-toggle'
+
+const blueIcon = L.icon({
+  iconUrl: bluemarker,
+  shadowUrl: markershadow,
+
+  iconSize:     [25, 41], // size of the icon
+  shadowSize:   [41, 41], // size of the shadow
+  iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+  shadowAnchor: [12, 41],  // the same for the shadow
+  popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+const greenIcon = L.icon({
+  iconUrl: greenmarker,
+  shadowUrl: markershadow,
+
+  iconSize:     [25, 41], // size of the icon
+  shadowSize:   [41, 41], // size of the shadow
+  iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+  shadowAnchor: [12, 41],  // the same for the shadow
+  popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+const redIcon = L.icon({
+  iconUrl: redmarker,
+  shadowUrl: markershadow,
+
+  iconSize:     [25, 41], // size of the icon
+  shadowSize:   [41, 41], // size of the shadow
+  iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+  shadowAnchor: [12, 41],  // the same for the shadow
+  popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+const darkIcon = L.icon({
+  iconUrl: darkmarker,
+  shadowUrl: markershadow,
+
+  iconSize:     [25, 41], // size of the icon
+  shadowSize:   [41, 41], // size of the shadow
+  iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+  shadowAnchor: [12, 41],  // the same for the shadow
+  popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+const cameraIcon = L.icon({
+  iconUrl: cameramarker,
+  shadowUrl: markershadow,
+
+  iconSize:     [30, 25], // size of the icon
+  shadowSize:   [41, 41], // size of the shadow
+  iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+  shadowAnchor: [12, 41],  // the same for the shadow
+  popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+const sensorIcon = L.icon({
+  iconUrl: sensormarker,
+  shadowUrl: markershadow,
+
+  iconSize:     [30, 30], // size of the icon
+  shadowSize:   [41, 41], // size of the shadow
+  iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+  shadowAnchor: [12, 41],  // the same for the shadow
+  popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+const telescopeIcon = L.icon({
+  iconUrl: telescopemarker,
+  shadowUrl: markershadow,
+
+  iconSize:     [30, 30], // size of the icon
+  shadowSize:   [41, 41], // size of the shadow
+  iconAnchor:   [12, 41], // point of the icon which will correspond to marker's location
+  shadowAnchor: [12, 41],  // the same for the shadow
+  popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+
+class Map extends Component {
+  
+  constructor(props) {
+    super(props);
+  
+  this.state = {
+    showSigned: true,
+    showSpoken: true,
+    showWritten: true,
+    showUnknown: true,
+    ipaccess:true
+  };
+}
+
+  dist_map = 0
+  blue_marker = 0
+  red_marker = 0
+  green_marker = 0
+  dark_marker = 0
+  tempID = 0
+  markers = []
+  selectedCamera = []
+  selectedIcon = (iconselected) => {
+    this.tempID = this.tempID + 1
+    let icon = 0
+    if(iconselected === 1)
+    {
+        icon = cameraIcon
+    }
+    if(iconselected === 2)
+    {
+        icon = telescopeIcon
+    }
+    if(iconselected === 3)
+    {
+        icon = sensorIcon
+    }
+
+    var options = {
+      pid: this.tempID,
+      icon: icon,
+      draggable: true
+    };
+    let self = this
+    
+    // var domelem = document.createElement('span');
+    // // domelem.innerHTML = `<p>My Coordinates :${this.dist_map.getCenter()}</p> <div id=${this.tempID}>View Camera</div>
+    // // Checkbox: <input type="checkbox" id="myCheck"  onclick="myFunction()"`;
+    // domelem.onclick = function (e) {
+    //   e.preventDefault();
+    //  console.log(self.dist_map)
+     
+    // };
+    var point = L.marker([this.dist_map.getCenter().lat, this.dist_map.getCenter().lng],options).addTo(this.dist_map);
+    // point.bindPopup(
+    //   domelem,
+    //   {
+    //     closeButton: false
+    //   }
+    // );
+    
+    point.on('dragend', function(evt){
+      var marker = evt.target;
+      console.log(marker)
+      var position = marker.getLatLng();
+      point.setLatLng(position,{draggable:'true'}).update();
+      // point.setLatLng(position,{draggable:'true'}).bindPopup(
+
+      
+      // domelem,
+      // {
+      //   closeButton: false
+      // }).update();
+    });
+
+    point.on('click', function(evt){
+      point.setIcon(blueIcon)
+      self.selectedMarkers(evt.target)
+    })
+    
+    this.markers.push(point);
+    
+  }
+
+  selectedMarkers = (evt) => {
+    console.log("called me")
+    console.log(evt.options.pid)
+    this.selectedCamera.push(evt.options.pid)
+    
+  }
+
+  viewFeed() {
+    // const history = history();
+    console.log("selected Cameras")
+    console.log(this.selectedCamera)
+    if(this.selectedCamera.length > 2)
+    {
+        alert("Please select 2 cameras at a time !!")
+    }
+
+    // browserHistory.push("/home");
+
+
+  }
+
+  handleChange() {
+    console.log("asadsa")
+    this.setState({
+      ipaccess: !this.state.ipaccess,
+    });
+    let {ipaccess} = {...this.state}
+    console.log(ipaccess)
+  }
+
+  handleCheckboxChange = changeEvent => {
+    const { name } = changeEvent.target;
+    
+
+    if (name === 'spoken') {
+      this.setState({
+        showSpoken: !this.state.showSpoken,
+      });
+      if(this.state.showSpoken === false)
+      {
+        this.red_marker = L.marker([14.0827, 79.2707], {icon: redIcon}).addTo(this.dist_map);
+      }
+      else{
+        this.red_marker.remove();
+      }
+    } else if (name === 'written') {
+      this.setState({
+        showWritten: !this.state.showWritten,
+      });
+      if(this.state.showWritten === false)
+      {
+        this.green_marker = L.marker([13.0827, 79.2707], {icon: greenIcon}).addTo(this.dist_map);
+      }
+      else{
+        this.green_marker.remove();
+      }
+    } else if (name === 'signed') {
+      this.setState({
+        showSigned: !this.state.showSigned,
+      });
+      if(this.state.showSigned === false)
+      {
+        this.blue_marker = L.marker([13.0827, 80.2707], {icon: blueIcon}).addTo(this.dist_map);
+      }
+      else{
+        this.blue_marker.remove();
+      }
+    } else if (name === 'unknown') {
+      this.setState({
+        showUnknown: !this.state.showUnknown,
+      });
+      if(this.state.showUnknown === false)
+      {
+        this.dark_marker = L.marker([12.0827, 79.2707], {icon: darkIcon}).addTo(this.dist_map);
+      }
+      else{
+        this.dark_marker.remove();
+      }
+    }
+  };
+
+  componentDidMount() {
+    
+    this.dist_map = L.map('mapid').setView([39.74, -104.99], 9);
+
+    L.tileLayer(
+      'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}',
+      {
+        // attribution:
+        //   'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 10,
+        draggable: true,
+        id: 'mapbox.streets',
+        accessToken:
+          'pk.eyJ1IjoicHJvdG9jb2w3IiwiYSI6ImNrMjUxZjEzYTAwbXYzbHRscnE5dDFnOWQifQ.uOVge_4xINbcWwQ8gA-rGg',
+      }
+    ).addTo(this.dist_map);
+
+   
+    
+  }
+
+  render() {
+    return (
+
+     <div className="row">
+         <header className={'page-header header-center'}>
+            <h2 className="head">Distribution Management</h2> 
+          </header>
+          
+            <button className="buttonclass" onClick={e=>{this.viewFeed}}>View Feed</button>
+          
+          {/* <span className="toggleclass">  
+            <Toggle
+              defaultChecked={this.state.ipaccess}
+              aria-label=''
+              onChange={e => {this.handleChange()}} />
+            { this.state.ipaccess 
+                    ? <div>This is visible</div>
+                    : null
+                }
+           </span> */}
+          
+         <div id="mapid"/>
+         <div id="box">Place on the map :
+          <span class="poi-type"><img class="drag" type="tree" src={cameramarker} alt="" onClick={e=>{this.selectedIcon(1)}}/></span>
+          <span class="poi-type"><img class="drag" type="red" src={telescopemarker} alt="" onClick={e=>{this.selectedIcon(2)}}/></span>
+          <span class="poi-type"><img class="drag" type="black" src={sensormarker} alt="" onClick={e=>{this.selectedIcon(3)}}/></span>
+        </div>
+      </div>
+    
+      
+    );
+  }
+}
+
+export default Map;
